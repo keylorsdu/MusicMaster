@@ -5,13 +5,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicHelper;
+
 
 public class MainActivity extends ActionBarActivity {
+
+    BaiduMusicHelper musicHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        musicHelper = BaiduMusicHelper.getBaiduMusicHelper();
+
+
     }
 
     @Override
