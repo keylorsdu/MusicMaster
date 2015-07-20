@@ -1,23 +1,71 @@
 package com.lidan.keylor.musicmaster;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicHelper;
+import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicRequest;
+import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicInfo;
+import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicList;
+
+import java.lang.reflect.Method;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements Thread.UncaughtExceptionHandler{
 
     BaiduMusicHelper musicHelper;
+    ListView musicListView;
+    ArrayAdapter<MusicInfo> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        musicHelper = BaiduMusicHelper.getBaiduMusicHelper();
+        Thread.setDefaultUncaughtExceptionHandler(this);
 
+        musicListView = (ListView) findViewById(R.id.lv_main_musiclist);
+
+        arrayAdapter = new ArrayAdapter<MusicInfo>(this, android.R.layout.simple_list_item_1);
+        musicListView.setAdapter(arrayAdapter);
+        AsyncTask<Void,Void,Void> a = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                return null;
+            }
+        };
+
+        //获取数据
+        musicHelper = BaiduMusicHelper.getBaiduMusicHelper();
+//        BaiduMusicRequest<String> baiduMusicRequest = new BaiduMusicRequest<>(Request.Method.GET, "", null);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        BaiduMusicRequest<MusicList> musicListBaiduMusicRequest =
+                new BaiduMusicRequest<>(Request.Method.GET, MusicList.class,
+                        musicHelper.getHotMusicListURL(0, 50), new Response.Listener<MusicList>() {
+                    @Override
+                    public void onResponse(MusicList response) {
+                        System.out.println(response);
+                        arrayAdapter.addAll(response.song_list);
+                        arrayAdapter.notifyDataSetChanged();
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("failed");
+                    }
+                });
+        requestQueue.add(musicListBaiduMusicRequest);
 
     }
 
@@ -41,5 +89,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void uncaughtException(Thread thread, Throwable ex) {
+        System.out.println(ex);
     }
 }

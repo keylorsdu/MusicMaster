@@ -8,8 +8,8 @@ import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicList;
  */
 public interface IMusic {
 
-    MusicList getHotMusicList(int start, int count);
+    String getHotMusicListURL(int start, int count);
 
-    MusicInfo getMusicInfo(int id);
+    String getMusicInfoURL(int id);
 
 }

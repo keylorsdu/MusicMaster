@@ -6,21 +6,24 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
     <ListView
         android:id="@+id/lv_main_musiclist"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></ListView>
+
+    <FrameLayout
+        android:id="@+id/fl_main_musiclist"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    </ListView>
-    <LinearLayout
-
-        android:layout_width="159dp"
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/fl_main_playcontrol"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-         <include
-             android:id="@+id/contentPanel"
-            layout="@layout/layout_musicplaycontroller" />
-    </LinearLayout>
+
+    </FrameLayout>
+
 
 
 
