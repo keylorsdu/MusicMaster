@@ -6,4 +6,6 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_music_play">MusicPlayActivity</string>
+    <string name="searchString">搜索</string>
 </resources>

@@ -1,9 +1,14 @@
 package com.lidan.keylor.musicmaster.BaiduApi.Bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by keylor on 15-7-9.
  */
-public class MusicInfo {
+public class MusicInfo implements Parcelable{
     String artist_id;// 57520;
     String language;// 国语;
     String pic_big;// http;//;//c.hiphotos.baidu.com/ting/pic/item/b151f8198618367a863be6502b738bd4b21ce589.jpg;
@@ -49,5 +54,180 @@ public class MusicInfo {
     @Override
     public String toString() {
         return title;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public String getPic_big() {
+        return pic_big;
+    }
+
+    public String getPic_small() {
+        return pic_small;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getPublishtime() {
+        return publishtime;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public String getAlbum_no() {
+        return album_no;
+    }
+
+    public String getLrclink() {
+        return lrclink;
+    }
+
+    public String getCopy_type() {
+        return copy_type;
+    }
+
+    public String getHot() {
+        return hot;
+    }
+
+    public String getAll_artist_ting_uid() {
+        return all_artist_ting_uid;
+    }
+
+    public String getIs_new() {
+        return is_new;
+    }
+
+    public String getResource_type() {
+        return resource_type;
+    }
+
+    public String getRank_change() {
+        return rank_change;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public String getAll_artist_id() {
+        return all_artist_id;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public String getDel_status() {
+        return del_status;
+    }
+
+    public String getRelate_status() {
+        return relate_status;
+    }
+
+    public String getToneid() {
+        return toneid;
+    }
+
+    public String getAll_rate() {
+        return all_rate;
+    }
+
+    public String getSound_effect() {
+        return sound_effect;
+    }
+
+    public String getFile_duration() {
+        return file_duration;
+    }
+
+    public int getHas_mv_mobile() {
+        return has_mv_mobile;
+    }
+
+    public String getSong_id() {
+        return song_id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getTing_uid() {
+        return ting_uid;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getAlbum_id() {
+        return album_id;
+    }
+
+    public String getAlbum_title() {
+        return album_title;
+    }
+
+    public int getIs_first_publish() {
+        return is_first_publish;
+    }
+
+    public int getHavehigh() {
+        return havehigh;
+    }
+
+    public int getCharge() {
+        return charge;
+    }
+
+    public int getHas_mv() {
+        return has_mv;
+    }
+
+    public int getLearn() {
+        return learn;
+    }
+
+    public String getSong_source() {
+        return song_source;
+    }
+
+    public String getPiao_id() {
+        return piao_id;
+    }
+
+    public String getKorean_bb_song() {
+        return korean_bb_song;
+    }
+
+    public String getResource_type_ext() {
+        return resource_type_ext;
+    }
+
+    public String getArtist_name() {
+        return artist_name;
+    }
+
+    public String getArtist_id() {
+
+        return artist_id;
     }
 }

@@ -1,10 +1,13 @@
 package com.lidan.keylor.musicmaster;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -20,13 +23,17 @@ import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicInfo;
 import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicList;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity implements Thread.UncaughtExceptionHandler{
 
+    public static final String MUSIC_ID = "id";
+
     BaiduMusicHelper musicHelper;
     ListView musicListView;
     ArrayAdapter<MusicInfo> arrayAdapter;
+    ArrayList<MusicInfo> musicList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +62,10 @@ public class MainActivity extends ActionBarActivity implements Thread.UncaughtEx
                     @Override
                     public void onResponse(MusicList response) {
                         System.out.println(response);
-                        arrayAdapter.addAll(response.song_list);
+                        musicList = response.song_list;
+                        arrayAdapter.clear();
+                        arrayAdapter.addAll(musicList);
+
                         arrayAdapter.notifyDataSetChanged();
 
                     }
@@ -66,6 +76,19 @@ public class MainActivity extends ActionBarActivity implements Thread.UncaughtEx
                     }
                 });
         requestQueue.add(musicListBaiduMusicRequest);
+
+        musicListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                MusicInfo musicInfo = arrayAdapter.getItem(position);
+                Intent musicPalyIntent = new Intent(MainActivity.this, MusicPlayActivity.class);
+                musicPalyIntent.putExtra(MUSIC_ID, musicInfo.getSong_id());
+
+                startActivity(musicPalyIntent);
+
+            }
+        });
 
     }
 
@@ -87,12 +110,17 @@ public class MainActivity extends ActionBarActivity implements Thread.UncaughtEx
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == R.id.action_search){
+            System.out.println("搜索");
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
+        System.out.println(thread);
         System.out.println(ex);
     }
 }
