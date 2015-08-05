@@ -23,11 +23,14 @@
         <activity
             android:name=".MusicPlayActivity"
             android:label="@string/title_activity_music_play"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".TestDrawer"
+            android:label="@string/title_activity_test_drawer" >
         </activity>
     </application>
 

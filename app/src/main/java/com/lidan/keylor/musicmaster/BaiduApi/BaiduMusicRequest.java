@@ -2,6 +2,8 @@ package com.lidan.keylor.musicmaster.BaiduApi;
 
 
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -16,6 +18,7 @@ import java.io.UnsupportedEncodingException;
  * Created by keylor on 15-7-9.
  */
 public class BaiduMusicRequest<T> extends Request<T>{
+    String TAG = BaiduMusicRequest.class.getSimpleName();
 
     Gson gson = new Gson();
     Response.Listener mListener;
@@ -31,6 +34,7 @@ public class BaiduMusicRequest<T> extends Request<T>{
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
             String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            Log.i(TAG, json);
             return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

@@ -1,12 +1,18 @@
 package com.lidan.keylor.musicmaster;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -24,9 +30,10 @@ import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicList;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity implements Thread.UncaughtExceptionHandler{
+public class MainActivity extends AppCompatActivity implements Thread.UncaughtExceptionHandler{
 
     public static final String MUSIC_ID = "id";
 
@@ -34,6 +41,9 @@ public class MainActivity extends ActionBarActivity implements Thread.UncaughtEx
     ListView musicListView;
     ArrayAdapter<MusicInfo> arrayAdapter;
     ArrayList<MusicInfo> musicList;
+    DrawerLayout drawerLayout;
+    ListView drawerList;
+    ArrayAdapter<String> drawerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +51,42 @@ public class MainActivity extends ActionBarActivity implements Thread.UncaughtEx
         setContentView(R.layout.activity_main);
         Thread.setDefaultUncaughtExceptionHandler(this);
 
-        musicListView = (ListView) findViewById(R.id.lv_main_musiclist);
+        //find view
+        musicListView = (ListView) findViewById(R.id.lv_main_music_list);
+        drawerLayout = (DrawerLayout) findViewById(R.id.dl_main);
+        drawerList = (ListView) findViewById(R.id.lv_drawer);
 
-        arrayAdapter = new ArrayAdapter<MusicInfo>(this, android.R.layout.simple_list_item_1);
-        musicListView.setAdapter(arrayAdapter);
-        AsyncTask<Void,Void,Void> a = new AsyncTask<Void, Void, Void>() {
+        //adapter
+        drawerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+                new String[]{"setting","music","personal info"});
+
+
+
+        arrayAdapter = new ArrayAdapter<MusicInfo>(this, android.R.layout.simple_list_item_1){
+        };
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.app_name ,R.string.app_name){
             @Override
-            protected Void doInBackground(Void... params) {
-                return null;
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                drawerList.setBackgroundColor(Color.WHITE);
             }
         };
+        actionBarDrawerToggle.syncState();
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        drawerList.setAdapter(drawerAdapter);
+        musicListView.setAdapter(arrayAdapter);
+
 
         //获取数据
         musicHelper = BaiduMusicHelper.getBaiduMusicHelper();
-//        BaiduMusicRequest<String> baiduMusicRequest = new BaiduMusicRequest<>(Request.Method.GET, "", null);
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         BaiduMusicRequest<MusicList> musicListBaiduMusicRequest =
                 new BaiduMusicRequest<>(Request.Method.GET, MusicList.class,
@@ -77,6 +109,7 @@ public class MainActivity extends ActionBarActivity implements Thread.UncaughtEx
                 });
         requestQueue.add(musicListBaiduMusicRequest);
 
+        //Listener
         musicListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,6 +120,16 @@ public class MainActivity extends ActionBarActivity implements Thread.UncaughtEx
 
                 startActivity(musicPalyIntent);
 
+            }
+        });
+        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = (String)parent.getItemAtPosition(position);
+                if ("music".equals(item)) {
+                    Intent toMusic = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(toMusic);
+                }
             }
         });
 
