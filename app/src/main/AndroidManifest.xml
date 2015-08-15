@@ -3,8 +3,11 @@
     package="com.lidan.keylor.musicmaster" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="ANDROID.PERMISSION.WRITE_APN_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
     <application
         android:allowBackup="true"
@@ -29,7 +32,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".TestDrawer"
+            android:name=".experiment.TestDrawer"
             android:label="@string/title_activity_test_drawer" >
         </activity>
     </application>
