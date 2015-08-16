@@ -1,0 +1,57 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
+    tools:context="com.lidan.keylor.musicmaster.view.activities.MusicActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.lidan.keylor.musicmaster.view.custom_views.autofitRecyclerView
+
+            android:id="@+id/activity_music_recycler"
+            android:paddingTop="?android:attr/actionBarSize"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.lidan.keylor.musicmaster.view.custom_views.autofitRecyclerView>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_music_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.lidan.keylor.musicmaster.view.custom_views.LobsterTestView
+
+                android:text="@string/musicheader"
+                android:textSize="22sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.v7.widget.Toolbar>
+        <ProgressBar
+            android:id="@+id/activity_music_progressbar"
+
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+
+    </FrameLayout>
+
+    <!--
+    <fragment
+        android:id="@+id/fragment_drawer"
+        android:name="com.lidan.keylor.musicmaster.view.fragments.DrawerFragment"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity = "start"/>
+
+        -->
+
+
+
+
+
+</android.support.v4.widget.DrawerLayout>

@@ -19,4 +19,6 @@
 
     <string name="action_example">Example action</string>
     <string name="welcome">你好</string>
+    <string name="title_activity_music">MusicActivity</string>
+    <string name="musicheader">Music Master</string>
 </resources>

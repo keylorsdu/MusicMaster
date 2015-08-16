@@ -54,7 +54,7 @@ public class BaiduMusicHelper implements IMusic{
         return sb.toString();
     }
     @Override
-    public String  getHotMusicListURL(int start, int count) {
+    public  String  getHotMusicListURL(int start, int count) {
         Map<String, String> params = new HashMap<>();
         params.put("format", FORMAT);
         params.put("from", FROM);

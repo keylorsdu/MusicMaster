@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 
-import com.lidan.keylor.musicmaster.view.VisualizerView;
+import com.lidan.keylor.musicmaster.experiment.VisualizerView;
 
 import org.json.JSONObject;
 
