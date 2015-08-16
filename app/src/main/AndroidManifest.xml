@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lidan.keylor.musicmaster" >
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,6 +9,7 @@
     <uses-permission android:name="ANDROID.PERMISSION.WRITE_APN_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-sdk tools:overrideLibrary="co.mobiwise.library" />
 
     <application
         android:allowBackup="true"
@@ -17,16 +19,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
+        </activity>
 
-        </activity>
-        <activity
-            android:name=".MusicPlayActivity"
-            android:label="@string/title_activity_music_play"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
         <activity
             android:name=".experiment.TestDrawer"
             android:label="@string/title_activity_test_drawer" >
@@ -34,8 +28,15 @@
         <activity
             android:name=".view.activities.MusicActivity"
             android:label="@string/title_activity_music" >
+
+        </activity>
+
+        <activity
+            android:name=".view.activities.PlayActivity"
+            android:label="@string/title_activity_play" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

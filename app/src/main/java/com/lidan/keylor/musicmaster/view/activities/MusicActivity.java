@@ -1,16 +1,16 @@
 package com.lidan.keylor.musicmaster.view.activities;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 
 import com.android.volley.RequestQueue;
@@ -78,31 +78,48 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean actionBarShowing = false;
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 int visable = recyclerView.getLayoutManager().getChildCount();
                 int totel = recyclerView.getLayoutManager().getItemCount();
-                int passed = ((LinearLayoutManager)recyclerView.getLayoutManager() ).findFirstVisibleItemPosition();
+                int passed = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
                 if (visable + passed >= totel) {
                     musicPresenter.onEndReached();
                 }
 
-                if(dy < -10){//向下拉
-                    if(!actionBarShowing){
-                        
-                        toolBar.setVisibility(View.GONE);
+                if (dy < -10) {//向上拉
+                    if (actionBarShowing) {
+
+                        toolBar.startAnimation(AnimationUtils.loadAnimation(MusicActivity.this
+                                , R.anim.down_on));
+                        actionBarShowing = false;
                     }
                 }
 
-                if(dy > 10){//向上拉
-                    if(actionBarShowing){
-                        toolBar.setVisibility(View.VISIBLE);
+                if (dy > 10) {//向上拉
+                    if (!actionBarShowing) {
+
+                        toolBar.startAnimation(AnimationUtils.loadAnimation(MusicActivity.this
+                                , R.anim.up_off));
+                        actionBarShowing = true;
                     }
                 }
 
+            }
+        });
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent playIntent = new Intent(MusicActivity.this, PlayActivity.class);
+
+                startActivity(playIntent);
             }
         });
 

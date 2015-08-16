@@ -2,17 +2,13 @@ package com.lidan.keylor.musicmaster;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -21,16 +17,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicHelper;
 import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicRequest;
 import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicInfo;
 import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicList;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements Thread.UncaughtExceptionHandler{
@@ -115,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements Thread.UncaughtEx
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 MusicInfo musicInfo = arrayAdapter.getItem(position);
-                Intent musicPalyIntent = new Intent(MainActivity.this, MusicPlayActivity.class);
+                Intent musicPalyIntent = new Intent(MainActivity.this, MusicPlayExperiActivity.class);
                 musicPalyIntent.putExtra(MUSIC_ID, musicInfo.getSong_id());
 
                 startActivity(musicPalyIntent);

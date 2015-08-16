@@ -24,6 +24,7 @@ public class MusicPresenter implements Presenter {
     }
 
 
+
     public void attach(MusicView musicView) {
         this.musicView = musicView;
     }

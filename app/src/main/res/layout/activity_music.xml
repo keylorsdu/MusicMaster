@@ -13,18 +13,21 @@
             android:id="@+id/activity_music_recycler"
             android:paddingTop="?android:attr/actionBarSize"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false">
 
         </com.lidan.keylor.musicmaster.view.custom_views.autofitRecyclerView>
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/activity_music_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/primary_material_dark">
             <com.lidan.keylor.musicmaster.view.custom_views.LobsterTestView
 
                 android:text="@string/musicheader"
                 android:textSize="22sp"
+                android:textColor="@color/highlighted_text_material_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

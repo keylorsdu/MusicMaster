@@ -32,9 +32,9 @@ import org.json.JSONObject;
 import java.math.BigInteger;
 
 
-public class MusicPlayActivity extends AppCompatActivity {
+public class MusicPlayExperiActivity extends AppCompatActivity {
 
-    private static final String TAG = MusicPlayActivity.class.getSimpleName();
+    private static final String TAG = MusicPlayExperiActivity.class.getSimpleName();
     private String songId="";
     private String songMP3URL;
     ImageButton play;
@@ -207,7 +207,7 @@ public class MusicPlayActivity extends AppCompatActivity {
                     songMP3URL = bitrate.getString("file_link");
                     Log.i(TAG, "MP3地址为：" + songMP3URL);
                     Uri uri = Uri.parse(songMP3URL);
-                    player = MediaPlayer.create(MusicPlayActivity.this, uri);
+                    player = MediaPlayer.create(MusicPlayExperiActivity.this, uri);
 
                     setupVisualizerFxAndUI();
                     player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

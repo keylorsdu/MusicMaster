@@ -5,4 +5,6 @@ package com.lidan.keylor.musicmaster.model.rest;
  */
 public interface MusicSource {
     void getMusics();
+
+    void getMusicById(String musicId);
 }

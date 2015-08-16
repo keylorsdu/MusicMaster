@@ -8,8 +8,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicHelper;
 import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicRequest;
-import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicInfo;
 import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicList;
+import com.lidan.keylor.musicmaster.model.entity.MusicPlayInfo;
 import com.squareup.otto.Bus;
 
 /**
@@ -19,10 +19,14 @@ public class RestMusicSource implements MusicSource {
     private static String TAG = RestMusicSource.class.getSimpleName();
     private static int pageCount = 10;
 
+    private static String PLAYMUSIXBASEURL ="http://tingapi.ting.baidu.com/v1/restserver/ting?from=webapp_music&method=baidu.ting.song.play&format=json&songid=";
+
     RequestQueue requestQueue;
     Bus bus;
 
     int currentPage = 1;
+
+
 
     public RestMusicSource(RequestQueue requestQueue ,Bus bus) {
         this.requestQueue = requestQueue;
@@ -63,5 +67,28 @@ public class RestMusicSource implements MusicSource {
         requestQueue.add(musicRequest);
         currentPage++;
 
+    }
+
+    @Override
+    public void getMusicById(final String musicId) {
+        String  requestUri = PLAYMUSIXBASEURL + musicId;
+        BaiduMusicRequest request = new BaiduMusicRequest<MusicPlayInfo>(Request.Method.GET, MusicPlayInfo.class
+                , requestUri, new Response.Listener<MusicPlayInfo>() {
+            @Override
+            public void onResponse(MusicPlayInfo response) {
+                Log.i(TAG, musicId + "的音乐信息已经得到:" + response.toString());
+
+                bus.post(response);
+
+                Log.i(TAG, "已经发出事件");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, musicId + "的音乐信息没收到");
+            }
+        });
+        requestQueue.add(request);
+        Log.i(TAG + musicId, "开始请求播放URL");
     }
 }
