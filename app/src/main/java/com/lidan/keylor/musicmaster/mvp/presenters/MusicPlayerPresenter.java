@@ -34,7 +34,8 @@ public class MusicPlayerPresenter implements Presenter {
 
 
         String bgURL = musicPlayInfo.getSonginfo().getPicBig();
-        musicPlayView.play(musicUri, bgURL);
+
+        musicPlayView.play(musicPlayInfo);
         Log.i(TAG, "开始播放");
 
 
@@ -59,6 +60,7 @@ public class MusicPlayerPresenter implements Presenter {
 
     @Override
     public void stop() {
+        bus.unregister(this);
 
     }
 }

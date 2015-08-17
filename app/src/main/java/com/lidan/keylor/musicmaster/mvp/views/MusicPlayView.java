@@ -1,6 +1,6 @@
 package com.lidan.keylor.musicmaster.mvp.views;
 
-import android.net.Uri;
+import com.lidan.keylor.musicmaster.model.entity.MusicPlayInfo;
 
 /**
  * Created by keylorlidan on 2015/8/16.
@@ -9,7 +9,7 @@ public interface MusicPlayView extends MVPView {
 
 
 
-    void play(Uri uri,String bgURL);
+    void play(MusicPlayInfo musicPlayInfo);
 
     void stop();
 

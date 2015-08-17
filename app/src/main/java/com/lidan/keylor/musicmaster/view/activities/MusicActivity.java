@@ -1,7 +1,6 @@
 package com.lidan.keylor.musicmaster.view.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -112,16 +111,16 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
             }
         });
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent playIntent = new Intent(MusicActivity.this, PlayActivity.class);
-
-                startActivity(playIntent);
-            }
-        });
+//        recyclerView.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent playIntent = new Intent(MusicActivity.this, PlayActivity.class);
+//
+//                startActivity(playIntent);
+//            }
+//        });
 
     }
 

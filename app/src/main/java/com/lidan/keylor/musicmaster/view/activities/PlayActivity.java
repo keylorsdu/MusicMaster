@@ -9,18 +9,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.lidan.keylor.musicmaster.R;
 import com.lidan.keylor.musicmaster.common.BusProvider;
 import com.lidan.keylor.musicmaster.domain.PlayMusicUsecase;
+import com.lidan.keylor.musicmaster.model.entity.MusicPlayInfo;
 import com.lidan.keylor.musicmaster.model.rest.RestMusicSource;
 import com.lidan.keylor.musicmaster.mvp.presenters.MusicPlayerPresenter;
 import com.lidan.keylor.musicmaster.mvp.views.MusicPlayView;
 
 import java.io.IOException;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import co.mobiwise.library.MusicPlayerView;
 
 public class PlayActivity extends AppCompatActivity implements MusicPlayView {
@@ -31,9 +35,18 @@ public class PlayActivity extends AppCompatActivity implements MusicPlayView {
     MusicPlayerView mpv ;
     private String songId="38233821";
 
-    MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer;
 
     MusicPlayerPresenter playerPresenter;
+
+    @Bind(R.id.textViewSong)
+    TextView songTitle;
+    @Bind(R.id.textViewSinger)
+    TextView songSinger;
+
+    public static MediaPlayer getMediaPlayer() {
+        return mediaPlayer == null ? new MediaPlayer() : mediaPlayer;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +56,10 @@ public class PlayActivity extends AppCompatActivity implements MusicPlayView {
 
         mpv = (MusicPlayerView) findViewById(R.id.mpv);
 
-//        songId = getIntent().getStringExtra(SONGID);
+        songId = getIntent().getStringExtra(SONGID);
+
+        Log.i(TAG, "收到歌曲ID" + songId);
+        ButterKnife.bind(this);
 
         initMPV();
 
@@ -61,6 +77,12 @@ public class PlayActivity extends AppCompatActivity implements MusicPlayView {
     protected void onStart() {
         super.onStart();
         playerPresenter.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        playerPresenter.stop();
     }
 
     private void initMPV() {
@@ -82,7 +104,8 @@ public class PlayActivity extends AppCompatActivity implements MusicPlayView {
     }
 
     private void initPlayer() {
-        mediaPlayer = new MediaPlayer();
+        mediaPlayer = getMediaPlayer();
+        mediaPlayer.reset();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -134,12 +157,26 @@ public class PlayActivity extends AppCompatActivity implements MusicPlayView {
     }
 
     @Override
-    public void play(Uri uri,String backgroudURL) {
+    public void play(MusicPlayInfo musicPlayInfo) {
 
-        mpv.setCoverURL(backgroudURL);
+        Uri musicUri = Uri.parse(musicPlayInfo.getBitrate().getFileLink());
 
+
+        String bgURL = musicPlayInfo.getSonginfo().getPicBig();
+        String musicTitle = musicPlayInfo.getSonginfo().getTitle();
+        String singer = musicPlayInfo.getSonginfo().getAuthor();
+        int musicTimeLength = musicPlayInfo.getBitrate().getFile_duration();
+
+
+        mpv.setCoverURL(bgURL);
+        mpv.setMax(musicTimeLength);
+
+
+        songTitle.setText(musicTitle);
+        songSinger.setText(singer);
+        
         try {
-            mediaPlayer.setDataSource(this, uri);
+            mediaPlayer.setDataSource(this, musicUri);
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();

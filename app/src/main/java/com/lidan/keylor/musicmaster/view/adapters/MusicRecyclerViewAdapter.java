@@ -1,6 +1,7 @@
 package com.lidan.keylor.musicmaster.view.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicInfo;
 import com.lidan.keylor.musicmaster.R;
-import com.lidan.keylor.musicmaster.mvp.views.MusicView;
+import com.lidan.keylor.musicmaster.view.activities.PlayActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -78,7 +79,7 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return musicInfoList.size();
     }
 
-    private class MusicHolder extends  RecyclerView.ViewHolder{
+    private class MusicHolder extends  RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView musicImageView;
         TextView musicTitle;
@@ -87,6 +88,23 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             musicImageView = (ImageView) itemView.findViewById(R.id.image_music);
             musicTitle = (TextView) itemView.findViewById(R.id.text_music_title);
+            musicImageView.setOnClickListener(this);
+            musicTitle.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            Log.i(TAG, "点击事件已捕获");
+            int position = getAdapterPosition();
+            String id = musicInfoList.get(position).getSong_id();
+            Intent playIntent = new Intent(v.getContext(), PlayActivity.class);
+
+            playIntent.putExtra(PlayActivity.SONGID, id);
+            Log.i(TAG, "开始跳转Activity");
+            v.getContext().startActivity(playIntent);
+
 
         }
     }
