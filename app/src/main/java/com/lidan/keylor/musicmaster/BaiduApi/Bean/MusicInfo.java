@@ -3,7 +3,8 @@ package com.lidan.keylor.musicmaster.BaiduApi.Bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by keylor on 15-7-9.
@@ -50,6 +51,8 @@ public class MusicInfo implements Parcelable{
     String korean_bb_song;// 0;
     String resource_type_ext;// 0;
     String artist_name;// 筷子兄弟
+
+
 
     @Override
     public String toString() {

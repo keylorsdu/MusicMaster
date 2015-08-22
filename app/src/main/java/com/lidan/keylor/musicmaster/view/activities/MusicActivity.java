@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.android.volley.RequestQueue;
@@ -17,7 +18,9 @@ import com.android.volley.toolbox.Volley;
 import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicInfo;
 import com.lidan.keylor.musicmaster.R;
 import com.lidan.keylor.musicmaster.common.BusProvider;
-import com.lidan.keylor.musicmaster.domain.GetMusicUsecase;
+import com.lidan.keylor.musicmaster.domain.GetHotMusicUsecase;
+import com.lidan.keylor.musicmaster.domain.GetNewestMusicUsecase;
+import com.lidan.keylor.musicmaster.model.rest.MusicSource;
 import com.lidan.keylor.musicmaster.model.rest.RestMusicSource;
 import com.lidan.keylor.musicmaster.mvp.presenters.MusicPresenter;
 import com.lidan.keylor.musicmaster.mvp.views.MusicView;
@@ -29,7 +32,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MusicActivity extends AppCompatActivity implements MusicView,Thread.UncaughtExceptionHandler{
+public class MusicActivity extends AppCompatActivity implements MusicView,Thread.UncaughtExceptionHandler, View.OnClickListener{
 
     //注入
 
@@ -40,9 +43,16 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
     @Bind(R.id.activity_music_toolbar)
     Toolbar toolBar;
 
+    @Bind((R.id.btn_hotest))
+    Button hotestMusic;
+    @Bind(R.id.btn_newest)
+    Button newestMusic;
+
     MusicPresenter musicPresenter;
 
     MusicRecyclerViewAdapter musicAdapter;
+
+    MusicSource musicSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +76,10 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
 
     private void initPresenter() {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        GetMusicUsecase getMusicUsecase;
-        getMusicUsecase = new GetMusicUsecase(new RestMusicSource(requestQueue, BusProvider.getBus()),BusProvider.getBus());
+        GetHotMusicUsecase getMusicUsecase;
+        musicSource = new RestMusicSource(requestQueue, BusProvider.getBus());
+
+        getMusicUsecase = new GetHotMusicUsecase(musicSource,BusProvider.getBus());
         musicPresenter = new MusicPresenter(getMusicUsecase, BusProvider.getBus());
         musicPresenter.attach(this);
 
@@ -128,6 +140,10 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
 
         setSupportActionBar(toolBar);
         getSupportActionBar().setTitle("");
+        hotestMusic.setOnClickListener(this);
+        newestMusic.setOnClickListener(this);
+        toolBar.startAnimation(AnimationUtils.loadAnimation(MusicActivity.this
+                , R.anim.down_on));
 
     }
 
@@ -135,6 +151,12 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
     protected void onStart() {
         super.onStart();
         musicPresenter.start();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
 
     }
 
@@ -211,6 +233,11 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
         musicAdapter.appendMusics(musics);
     }
 
+    @Override
+    public void clear() {
+        musicAdapter.clear();
+    }
+
 
     @Override
     public Context getContext() {
@@ -223,4 +250,22 @@ public class MusicActivity extends AppCompatActivity implements MusicView,Thread
         System.err.println(ex.fillInStackTrace());
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.btn_newest:
+                musicPresenter.setUsecase(new GetNewestMusicUsecase(musicSource,BusProvider.getBus()));
+                musicPresenter.start();
+                break;
+
+            case R.id.btn_hotest:
+                musicPresenter.setUsecase(new GetHotMusicUsecase(musicSource,BusProvider.getBus()));
+                musicPresenter.start();
+                break;
+            default:
+                break;
+
+        }
+    }
 }

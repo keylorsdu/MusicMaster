@@ -60,7 +60,7 @@ public class MusicPlayerPresenter implements Presenter {
 
     @Override
     public void stop() {
-        bus.unregister(this);
+//        bus.unregister(this);
 
     }
 }

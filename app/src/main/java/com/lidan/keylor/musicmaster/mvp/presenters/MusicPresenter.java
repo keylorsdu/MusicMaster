@@ -2,6 +2,7 @@ package com.lidan.keylor.musicmaster.mvp.presenters;
 
 import android.util.Log;
 
+import com.lidan.keylor.musicmaster.BaiduApi.BaiduMusicHelper;
 import com.lidan.keylor.musicmaster.BaiduApi.Bean.MusicList;
 import com.lidan.keylor.musicmaster.domain.Usecase;
 import com.lidan.keylor.musicmaster.mvp.views.MusicView;
@@ -15,15 +16,23 @@ public class MusicPresenter implements Presenter {
     private static String TAG = MusicPresenter.class.getSimpleName();
     private MusicView musicView;
     private Bus bus;
-    Usecase GetMusicUsecase;
+    Usecase usecase;
 
 
-    public MusicPresenter(Usecase GetMusicUsecase,Bus bus){
-        this.GetMusicUsecase = GetMusicUsecase;
+    public MusicPresenter(Usecase usecase,Bus bus){
+        this.usecase = usecase;
         this.bus = bus;
+        bus.register(this);
     }
 
 
+    public Usecase getUsecase() {
+        return usecase;
+    }
+
+    public void setUsecase(Usecase usecase) {
+        this.usecase = usecase;
+    }
 
     public void attach(MusicView musicView) {
         this.musicView = musicView;
@@ -31,32 +40,53 @@ public class MusicPresenter implements Presenter {
 
     public void onEndReached() {
         musicView.showLoadingLabel();
-        GetMusicUsecase.execute();
+        usecase.execute();
     }
 
     @Subscribe
     public void onMusicsRecieved(MusicList result) {
         Log.i(TAG, "音乐收到了" + result);
-        if (musicView.isEmpty()) {
-            musicView.hideLoading();
-            musicView.showMusic(result.song_list);
 
-        } else {
-            musicView.hideLoadingLabel();
-            musicView.appendMusic(result.song_list);
+        if(BaiduMusicHelper.METHODBILLLIST.equals(result.extention.get("method")) &&
+                (BaiduMusicHelper.HOTLIST+"").equals(result.extention.get("type"))) {
+            if (musicView.isEmpty()) {
+                musicView.hideLoading();
+                musicView.showMusic(result.song_list);
+
+            } else {
+                musicView.hideLoadingLabel();
+                musicView.appendMusic(result.song_list);
+            }
         }
+
+        if(BaiduMusicHelper.METHODBILLLIST.equals(result.extention.get("method")) &&
+                (BaiduMusicHelper.NEWLIST+"").equals(result.extention.get("type"))) {
+            if (musicView.isEmpty()) {
+                musicView.hideLoading();
+                musicView.showMusic(result.song_list);
+
+            } else {
+                musicView.hideLoadingLabel();
+                musicView.appendMusic(result.song_list);
+            }
+        }
+
     }
 
     @Override
     public void start() {
         Log.i(TAG, "presenter started");
         if (musicView.isEmpty()) {
-            bus.register(this);
+
             musicView.showLoading();
-            GetMusicUsecase.execute();
-            Log.i(TAG, "GetMusicUsecase executed");
+            usecase.execute();
+            Log.i(TAG, "usecase executed");
 
 
+        }else {
+            Log.i(TAG, "usecase executed");
+            musicView.clear();
+            usecase.execute();
         }
 
 

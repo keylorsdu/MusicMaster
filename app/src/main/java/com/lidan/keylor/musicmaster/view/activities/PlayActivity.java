@@ -174,7 +174,7 @@ public class PlayActivity extends AppCompatActivity implements MusicPlayView {
 
         songTitle.setText(musicTitle);
         songSinger.setText(singer);
-        
+
         try {
             mediaPlayer.setDataSource(this, musicUri);
             mediaPlayer.prepareAsync();

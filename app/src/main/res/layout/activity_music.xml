@@ -8,6 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.lidan.keylor.musicmaster.view.custom_views.autofitRecyclerView
 
             android:id="@+id/activity_music_recycler"
@@ -28,8 +29,22 @@
                 android:text="@string/musicheader"
                 android:textSize="22sp"
                 android:textColor="@color/highlighted_text_material_light"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <Button
+
+                android:id="@+id/btn_newest"
+                android:text="最新"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btn_hotest"
+                android:text="最热"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
 
         </android.support.v7.widget.Toolbar>
         <ProgressBar

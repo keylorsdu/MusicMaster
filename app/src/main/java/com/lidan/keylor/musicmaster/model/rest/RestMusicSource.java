@@ -18,15 +18,23 @@ import com.squareup.otto.Bus;
 public class RestMusicSource implements MusicSource {
     private static String TAG = RestMusicSource.class.getSimpleName();
     private static int pageCount = 10;
+    BaiduMusicHelper helper = new BaiduMusicHelper();
 
     private static String PLAYMUSIXBASEURL ="http://tingapi.ting.baidu.com/v1/restserver/ting?from=webapp_music&method=baidu.ting.song.play&format=json&songid=";
 
     RequestQueue requestQueue;
     Bus bus;
 
-    int currentPage = 1;
+    String HotRequestTag = "hot";
+    String NewestReqeestTag = "newest";
+    /*
+    * currentPages[0] hot Music's current page
+    * currentPages[1] newest music's curretn page
+     */
+    int[] currentPages = new int[10];
 
-
+    int hot = 0;
+    int newest = 1;
 
     public RestMusicSource(RequestQueue requestQueue ,Bus bus) {
         this.requestQueue = requestQueue;
@@ -35,19 +43,24 @@ public class RestMusicSource implements MusicSource {
     }
 
     @Override
-    public void getMusics() {
+    public void getHotBillListMusics() {
+        Log.i(TAG, "getmusic begin");
 
-        if (currentPage * pageCount >= 100) {
+        requestQueue.cancelAll(HotRequestTag);
+
+        if ((currentPages[hot] + 1) * pageCount >= 100) {
             bus.post("最后一页");
             return;
         }
-        BaiduMusicHelper helper = new BaiduMusicHelper();
-        String requestUri = helper.getHotMusicListURL((currentPage - 1) * pageCount, pageCount);
+
+        String requestUri = helper.getHotMusicListURL(currentPages[hot] * pageCount, pageCount);
         Log.i(TAG, "开始请求 " + requestUri);
         BaiduMusicRequest musicRequest = new BaiduMusicRequest<MusicList>(Request.Method.GET,
                 MusicList.class, requestUri, new Response.Listener<MusicList>() {
             @Override
             public void onResponse(MusicList response) {
+                response.extention.put("method", BaiduMusicHelper.METHODBILLLIST);
+                response.extention.put("type", BaiduMusicHelper.HOTLIST + "");
                 Log.i(TAG, "结果为" + response);
                 Log.i(TAG, "bus 发布结果");
                 if (response instanceof MusicList) {
@@ -64,8 +77,91 @@ public class RestMusicSource implements MusicSource {
                 Log.i(TAG, "结果错误");
             }
         });
+        musicRequest.setTag(HotRequestTag);
         requestQueue.add(musicRequest);
-        currentPage++;
+
+        currentPages[hot]++;
+
+    }
+
+    @Override
+    public void getNewestBillListMusics() {
+        requestQueue.cancelAll(NewestReqeestTag);
+        if ((currentPages[newest]+1) * pageCount >= 100) {
+            bus.post("最后一页");
+            return;
+        }
+
+        final String requestUri = helper.newBillListURL(BaiduMusicHelper.NEWLIST, pageCount, currentPages[newest] * pageCount);
+        Log.i(TAG, "开始请求 " + requestUri);
+        BaiduMusicRequest musicRequest = new BaiduMusicRequest<MusicList>(Request.Method.GET,
+                MusicList.class, requestUri, new Response.Listener<MusicList>() {
+            @Override
+            public void onResponse(MusicList response) {
+
+                response.extention.put("method", BaiduMusicHelper.METHODBILLLIST);
+                response.extention.put("type", BaiduMusicHelper.NEWLIST+"");
+                Log.i(TAG, "结果为" + response);
+                Log.i(TAG, "bus 发布结果");
+                if (response instanceof MusicList) {
+                    bus.post(response);
+                } else {
+                    bus.post("最后一页");
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "结果错误");
+            }
+        });
+        musicRequest.setTag(NewestReqeestTag);
+        requestQueue.add(musicRequest);
+
+        currentPages[newest]++;
+
+
+    }
+
+    @Override
+    public void getRockBillListMusics() {
+
+    }
+
+    @Override
+    public void getJazzBillListMusics() {
+
+    }
+
+    @Override
+    public void getPopuliarBillListMusics() {
+
+    }
+
+    @Override
+    public void getEnglishHotBillListMusics() {
+
+    }
+
+    @Override
+    public void getClassicBillListMusics() {
+
+    }
+
+    @Override
+    public void getRetimBillListMusics() {
+
+    }
+
+    @Override
+    public void getGoldMovieBillListMusics() {
+
+    }
+
+    @Override
+    public void getPopularInternetBillListMusics() {
 
     }
 
@@ -90,5 +186,35 @@ public class RestMusicSource implements MusicSource {
         });
         requestQueue.add(request);
         Log.i(TAG + musicId, "开始请求播放URL");
+    }
+
+    @Override
+    public void getCatalogSug() {
+
+    }
+
+    @Override
+    public void getPlayAAC() {
+
+    }
+
+    @Override
+    public void getRecommandSongList() {
+
+    }
+
+    @Override
+    public void getDownWeb() {
+
+    }
+
+    @Override
+    public void getArtistInfo() {
+
+    }
+
+    @Override
+    public void getArtistSongList() {
+
     }
 }

@@ -79,6 +79,11 @@ public class MusicRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return musicInfoList.size();
     }
 
+    public void clear() {
+        musicInfoList.clear();
+        notifyDataSetChanged();
+    }
+
     private class MusicHolder extends  RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView musicImageView;

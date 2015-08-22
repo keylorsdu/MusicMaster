@@ -21,4 +21,6 @@ public interface MusicView extends MVPView {
     boolean isEmpty();
 
     void appendMusic(List<MusicInfo> musics);
+
+    void clear();
 }
